@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 
 export function middleware(request: NextRequest) {
   // Check if the request is for admin routes (excluding login page)
+  //Thinh add
 
   if ((request.nextUrl.pathname.startsWith('/admin') || request.nextUrl.pathname.startsWith('/api/admin')) &&
       !request.nextUrl.pathname.startsWith('/XX_afternoon/login')) {

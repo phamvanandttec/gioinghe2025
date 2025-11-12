@@ -1,5 +1,5 @@
 export interface Company {
-  Id: number;
+  id?: number;
   name: string;
   address: string;
   telephone: string;
@@ -15,11 +15,12 @@ export interface Company {
   contact_mobile: string;
   contact_email: string;
   
-  status: string;
+  // Status
+  status: 'ACTIVE' | 'DEACTIVE';
 }
 
 export interface Product {
-  id: string;
+ id: string;
   company_id?: number;
   name: string;
   description: string;
@@ -30,5 +31,5 @@ export interface Product {
   gross_weight_kg: number;
   net_weight_kg: number;
   weight_unit: string;
-  status: string;
+  status: 'SHOW' | 'HIDDEN';
 }

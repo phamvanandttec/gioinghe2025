@@ -1,22 +1,17 @@
-import { NextRequest, NextResponse } from 'next/server';
+import { NextResponse } from 'next/server';
 import pool from '@/lib/db';
 import { RowDataPacket } from 'mysql2';
-import { Product } from '@/types/company';
+import { Company } from '@/types/company';
 
-interface ProductRow extends Product, RowDataPacket {}
+interface CompanyRow extends Company, RowDataPacket {}
 
-export async function GET(
-  request: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
-) {
+export async function GET() {
   try {
-    const { id } = await params;
     const connection = await pool.getConnection();
     
     try {
-      const [rows] = await connection.query<ProductRow[]>(
-        "SELECT * FROM product WHERE `Company Id` = ? AND status = 'SHOW' ORDER BY GTIN",
-        [id]
+      const [rows] = await connection.query<CompanyRow[]>(
+        "SELECT * FROM company WHERE status = 'DEACTIVE' ORDER BY Id"
       );
       
       return NextResponse.json({
@@ -32,7 +27,7 @@ export async function GET(
     return NextResponse.json(
       { 
         success: false,
-        error: 'Failed to fetch products',
+        error: 'Failed to fetch deactivated companies',
         message: error instanceof Error ? error.message : 'Unknown error'
       },
       { status: 500 }

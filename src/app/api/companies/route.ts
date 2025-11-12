@@ -5,18 +5,32 @@ import { Company } from '@/types/company';
 
 interface CompanyRow extends Company, RowDataPacket {}
 
-export async function GET() {
+export async function GET(request: NextRequest) {
   try {
+    const { searchParams } = new URL(request.url);
+    const statusParam = searchParams.get('status') || 'active'; // 'active', 'inactive', or 'all'
+    
     const connection = await pool.getConnection();
     
     try {
-      const [rows] = await connection.query<CompanyRow[]>(
-        'SELECT * FROM company'
-      );
+      let query = 'SELECT * FROM company';
+      
+      if (statusParam === 'active') {
+        query += " WHERE status = 'ACTIVE'";
+      } else if (statusParam === 'inactive') {
+        query += " WHERE status = 'DEACTIVE'";
+      }
+      // For 'all', no WHERE clause needed
+      
+      query += ' ORDER BY Id';
+      
+      const [rows] = await connection.query<CompanyRow[]>(query);
+      
       return NextResponse.json({
         success: true,
         data: rows,
-        count: rows.length
+        count: rows.length,
+        status: statusParam
       });
     } finally {
       connection.release();
@@ -67,8 +81,8 @@ export async function POST(request: NextRequest) {
       const [result] = await connection.query<ResultSetHeader>(
         `INSERT INTO companies 
         (name, address, telephone, email, owner_name, owner_mobile, owner_email, 
-         contact_name, contact_mobile, contact_email) 
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+         contact_name, contact_mobile, contact_email, status) 
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'ACTIVE')`,
         [name, address, telephone, email, owner_name, owner_mobile, owner_email,
          contact_name || null, contact_mobile || null, contact_email || null]
       );

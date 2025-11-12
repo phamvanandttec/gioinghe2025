@@ -15,7 +15,7 @@ export async function GET(
     
     try {
       const [rows] = await connection.query<CompanyRow[]>(
-        'SELECT * FROM company WHERE Id = ?',
+        'SELECT * FROM company WHERE id = ?',
         [id]
       );
       
@@ -82,13 +82,14 @@ export async function PUT(
     
     try {
       const [result] = await connection.query<ResultSetHeader>(
-        `UPDATE company 
-        SET \`Company Name\` = ?, \`Company Address\` = ?, \`Company Telephone Number\` = ?, \`Company Email Address\` = ?, 
-            \`Owner Name\` = ?, \`Owner Mobile Number\` = ?, \`Owner Email Address\` = ?,
-            \`Contact Name\` = ?, \`Contact Mobile Number\` = ?, \`Contact Email Address\` = ?
-        WHERE Id = ?`,
+        `UPDATE companies 
+        SET name = ?, address = ?, telephone = ?, email = ?, 
+            owner_name = ?, owner_mobile = ?, owner_email = ?,
+            contact_name = ?, contact_mobile = ?, contact_email = ?,
+            updated_at = CURRENT_TIMESTAMP
+        WHERE id = ?`,
         [name, address, telephone, email, owner_name, owner_mobile, owner_email,
-         contact_name , contact_mobile , contact_email, Number.parseInt(id)]
+         contact_name || null, contact_mobile || null, contact_email || null, id]
       );
       
       if (result.affectedRows === 0) {
@@ -118,18 +119,34 @@ export async function PUT(
   }
 }
 
-export async function DELETE(
+// New endpoint for deactivating/reactivating companies
+export async function PATCH(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const { id } = await params;
+    const body = await request.json();
+    const { action } = body; // 'deactivate' or 'reactivate'
+    
+    if (!action || (action !== 'deactivate' && action !== 'reactivate')) {
+      return NextResponse.json(
+        { 
+          success: false,
+          error: 'Invalid action. Use "deactivate" or "reactivate"'
+        },
+        { status: 400 }
+      );
+    }
+    
     const connection = await pool.getConnection();
     
     try {
+      const newStatus = action === 'reactivate' ? 'ACTIVE' : 'DEACTIVE';
+      
       const [result] = await connection.query<ResultSetHeader>(
-        'DELETE FROM company WHERE Id = ?',
-        [id]
+        'UPDATE company SET status = ? WHERE Id = ?',
+        [newStatus, Number.parseInt(id)]
       );
       
       if (result.affectedRows === 0) {
@@ -139,9 +156,12 @@ export async function DELETE(
         );
       }
       
+      // The MySQL trigger will automatically handle hiding/showing products
+      
       return NextResponse.json({
         success: true,
-        message: 'Company deleted successfully'
+        message: `Company ${action}d successfully`,
+        data: { id, status: newStatus }
       });
     } finally {
       connection.release();
@@ -151,7 +171,7 @@ export async function DELETE(
     return NextResponse.json(
       { 
         success: false,
-        error: 'Failed to delete company',
+        error: 'Failed to update company status',
         message: error instanceof Error ? error.message : 'Unknown error'
       },
       { status: 500 }

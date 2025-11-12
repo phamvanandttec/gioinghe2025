@@ -16,7 +16,6 @@ export default function CompanyDetailPage() {
     const [error, setError] = useState<string | null>(null);
     const [isEditing, setIsEditing] = useState(false);
     const [formData, setFormData] = useState<Company>({
-        Id: 0,
         name: '',
         address: '',
         telephone: '',
@@ -27,7 +26,7 @@ export default function CompanyDetailPage() {
         contact_name: '',
         contact_mobile: '',
         contact_email: '',
-        status: ''
+        status: 'ACTIVE'
     });
 
     useEffect(() => {
@@ -50,7 +49,7 @@ export default function CompanyDetailPage() {
             if (result.success) {
                 console.log("RRR result:", result.data.Id, result.data['Company Name']);
                 setCompany({
-                    Id: result.data.Id || 0,
+                    id: result.data.Id || 0,
                     name: result.data['Company Name'] ||'',
                     address: result.data['Company Address'] || '',
                     telephone: result.data['Company Telephone Number'] || '',
@@ -65,7 +64,7 @@ export default function CompanyDetailPage() {
                 });
                 // Map API response to formData structure
                 setFormData({
-                    Id: result.data.Id || 0,
+                    id: result.data.Id || 0,
                     name: result.data['Company Name'] ||'',
                     address: result.data['Company Address'] || '',
                     telephone: result.data['Company Telephone Number'] || '',

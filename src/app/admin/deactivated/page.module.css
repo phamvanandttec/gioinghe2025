@@ -15,47 +15,35 @@
     padding: 1.5rem 2rem;
     border-radius: 12px;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    border-left: 4px solid #dc3545;
+}
+
+.headerLeft {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+}
+
+.backButton {
+    padding: 0.5rem 1rem;
+    background: #6c757d;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background 0.2s;
+    font-weight: 500;
+}
+
+.backButton:hover {
+    background: #5a6268;
 }
 
 .title {
     font-size: 2rem;
     font-weight: bold;
-    color: #333;
-}
-
-.headerActions {
-    display: flex;
-    gap: 1rem;
-}
-
-.createButton {
-    padding: 0.75rem 1.5rem;
-    background: #667eea;
-    color: white;
-    border: none;
-    border-radius: 8px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: background 0.2s;
-}
-
-.createButton:hover {
-    background: #5568d3;
-}
-
-.deactivatedButton {
-    padding: 0.75rem 1.5rem;
-    background: #6c757d;
-    color: white;
-    border: none;
-    border-radius: 8px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: background 0.2s;
-}
-
-.deactivatedButton:hover {
-    background: #5a6268;
+    color: #dc3545;
+    margin: 0;
 }
 
 .content {
@@ -104,7 +92,11 @@
 }
 
 .table tbody tr:hover {
-    background: #f8f9fa;
+    background: #fff5f5;
+}
+
+.deactivatedRow {
+    background: #fff5f5;
 }
 
 .actions {
@@ -113,7 +105,7 @@
 }
 
 .viewButton,
-.deactivateButton {
+.reactivateButton {
     padding: 0.5rem 1rem;
     border: none;
     border-radius: 6px;
@@ -132,11 +124,11 @@
     background: #5568d3;
 }
 
-.deactivateButton {
-    background: #fd7e14;
+.reactivateButton {
+    background: #28a745;
     color: white;
 }
 
-.deactivateButton:hover {
-    background: #e66a00;
+.reactivateButton:hover {
+    background: #218838;
 }

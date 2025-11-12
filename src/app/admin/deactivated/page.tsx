@@ -5,37 +5,37 @@ import { useRouter } from 'next/navigation';
 import styles from './page.module.css';
 import { Company } from '@/types/company';
 
-export default function AdminPage() {
+export default function DeactivatedCompaniesPage() {
     const router = useRouter();
     const [companies, setCompanies] = useState<Company[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
 
     useEffect(() => {
-        fetchCompanies();
+        fetchDeactivatedCompanies();
     }, []);
 
-    const fetchCompanies = async () => {
+    const fetchDeactivatedCompanies = async () => {
         try {
             setLoading(true);
-            const response = await fetch('/api/companies');
+            const response = await fetch('/api/companies/deactivated');
             const result = await response.json();
             
             if (result.success) {
                 setCompanies(result.data);
             } else {
-                setError(result.error || 'Failed to fetch companies');
+                setError(result.error || 'Failed to fetch deactivated companies');
             }
         } catch (err) {
-            setError('An error occurred while fetching companies');
+            setError('An error occurred while fetching deactivated companies');
             console.error(err);
         } finally {
             setLoading(false);
         }
     };
 
-    const handleDeactivate = async (id: number) => {
-        if (!confirm('Are you sure you want to deactivate this company? This will also hide all associated products.')) {
+    const handleReactivate = async (id: number) => {
+        if (!confirm('Are you sure you want to reactivate this company? This will also show all associated products.')) {
             return;
         }
 
@@ -43,23 +43,20 @@ export default function AdminPage() {
             const response = await fetch(`/api/companies/${id}`, {
                 method: 'PATCH',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ action: 'deactivate' })
+                body: JSON.stringify({ action: 'reactivate' })
             });
             const result = await response.json();
             
             if (result.success) {
                 setCompanies(companies.filter(c => c.id !== id));
+                alert('Company reactivated successfully');
             } else {
-                alert(result.error || 'Failed to deactivate company');
+                alert(result.error || 'Failed to reactivate company');
             }
         } catch (err) {
-            alert('An error occurred while deactivating the company');
+            alert('An error occurred while reactivating the company');
             console.error(err);
         }
-    };
-
-    const handleCreate = () => {
-        router.push('/admin/companies/new');
     };
 
     const handleView = (id: number) => {
@@ -69,7 +66,7 @@ export default function AdminPage() {
     if (loading) {
         return (
             <div className={styles.container}>
-                <div className={styles.loading}>Loading companies...</div>
+                <div className={styles.loading}>Loading deactivated companies...</div>
             </div>
         );
     }
@@ -85,24 +82,18 @@ export default function AdminPage() {
     return (
         <div className={styles.container}>
             <div className={styles.header}>
-                <h1 className={styles.title}>Company Management</h1>
-                <div className={styles.headerActions}>
-                    <button 
-                        onClick={() => router.push('/admin/deactivated')} 
-                        className={styles.deactivatedButton}
-                    >
-                        View Deactivated Companies
+                <div className={styles.headerLeft}>
+                    <button onClick={() => router.push('/admin')} className={styles.backButton}>
+                        ← Back to Active Companies
                     </button>
-                    <button onClick={handleCreate} className={styles.createButton}>
-                        + Create New Company
-                    </button>
+                    <h1 className={styles.title}>Deactivated Companies</h1>
                 </div>
             </div>
             
             <div className={styles.content}>
                 {companies.length === 0 ? (
                     <div className={styles.empty}>
-                        <p>No companies found. Create your first company!</p>
+                        <p>No deactivated companies found.</p>
                     </div>
                 ) : (
                     <div className={styles.tableContainer}>
@@ -119,7 +110,7 @@ export default function AdminPage() {
                             </thead>
                             <tbody>
                                 {companies.map((company) => (
- <tr key={company.Id}>
+                                    <tr key={company.Id} className={styles.deactivatedRow}>
                                         <td>{company.Id}</td>
                                         <td>{company['Company Name']}</td>
                                         <td>{company['Company Email Address']}</td>
@@ -128,21 +119,20 @@ export default function AdminPage() {
                                         <td>
                                             <div className={styles.actions}>
                                                 <button
-                                                    onClick={() => handleView(company.Id!)}
+                                                    onClick={() => handleView(company.Id)}
                                                     className={styles.viewButton}
                                                 >
                                                     View
                                                 </button>
                                                 <button
-                                                    onClick={() => handleDeactivate(company.Id!)}
-                                                    className={styles.deactivateButton}
+                                                    onClick={() => handleReactivate(company.Id)}
+                                                    className={styles.reactivateButton}
                                                 >
-                                                    Deactivate
+                                                    Reactivate
                                                 </button>
                                             </div>
                                         </td>
                                     </tr>
- 
                                 ))}
                             </tbody>
                         </table>

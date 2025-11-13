@@ -82,14 +82,13 @@ export async function PUT(
     
     try {
       const [result] = await connection.query<ResultSetHeader>(
-        `UPDATE companies 
-        SET name = ?, address = ?, telephone = ?, email = ?, 
-            owner_name = ?, owner_mobile = ?, owner_email = ?,
-            contact_name = ?, contact_mobile = ?, contact_email = ?,
-            updated_at = CURRENT_TIMESTAMP
-        WHERE id = ?`,
+        `UPDATE company
+        SET \`Company Name\` = ?, \`Company Address\` = ?, \`Company Telephone Number\` = ?, \`Company Email Address\` = ?, 
+            \`Owner Name\` = ?, \`Owner Mobile Number\` = ?, \`Owner Email Address\` = ?,
+            \`Contact Name\` = ?, \`Contact Mobile Number\` = ?, \`Contact Email Address\` = ?
+        WHERE \`Id\` = ?`,
         [name, address, telephone, email, owner_name, owner_mobile, owner_email,
-         contact_name || null, contact_mobile || null, contact_email || null, id]
+         contact_name || null, contact_mobile || null, contact_email || null, Number.parseInt(id)]
       );
       
       if (result.affectedRows === 0) {

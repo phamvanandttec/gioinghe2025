@@ -67,6 +67,26 @@ export default function LoginPage() {
             Login
           </button>
         </form>
+        
+        <div className={styles.quickLinks}>
+          <h3>Quick Access</h3>
+          <div className={styles.linkButtons}>
+            <button 
+              className={styles.linkButton}
+              onClick={() => router.push('/admin')}
+              type="button"
+            >
+              Company Management
+            </button>
+            <button 
+              className={styles.linkButton}
+              onClick={() => router.push('/admin/products')}
+              type="button"
+            >
+              Product Management
+            </button>
+          </div>
+        </div>
       </div>
     </div>
   );

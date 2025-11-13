@@ -1,0 +1,295 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  width: 100%;
+  max-width: 400px;
+}
+
+.imagePreview {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 200px;
+  border-radius: 8px;
+  overflow: hidden;
+  border: 2px solid #e1e5e9;
+  background-color: #f8f9fa;
+}
+
+.previewImage {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.removeButton {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  background: rgba(220, 53, 69, 0.9);
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 28px;
+  height: 28px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  font-weight: bold;
+  z-index: 2;
+  transition: all 0.2s ease;
+}
+
+.removeButton:hover {
+  background: rgba(220, 53, 69, 1);
+  transform: scale(1.1);
+}
+
+.dropZone {
+  width: 100%;
+  min-height: 120px;
+  border: 2px dashed #cbd5e0;
+  border-radius: 8px;
+  background: #f7fafc;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  padding: 1.5rem;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.dropZone:hover {
+  border-color: #4299e1;
+  background: #ebf8ff;
+  transform: translateY(-1px);
+}
+
+.dropZone:focus {
+  outline: 2px solid #4299e1;
+  outline-offset: 2px;
+}
+
+.dropZone:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.dropZone:disabled:hover {
+  border-color: #cbd5e0;
+  background: #f7fafc;
+  transform: none;
+}
+
+.dragOver {
+  border-color: #48bb78;
+  background: #f0fff4;
+  transform: scale(1.02);
+}
+
+.uploading {
+  border-color: #ed8936;
+  background: #fffaf0;
+  cursor: wait;
+}
+
+.dropContent {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.uploadIcon {
+  font-size: 2rem;
+  margin-bottom: 0.5rem;
+  opacity: 0.7;
+}
+
+.dropContent p {
+  margin: 0;
+  font-weight: 500;
+  color: #4a5568;
+}
+
+.dropContent small {
+  color: #718096;
+  font-size: 0.875rem;
+}
+
+.uploadingState {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.spinner {
+  width: 24px;
+  height: 24px;
+  border: 3px solid #e2e8f0;
+  border-top: 3px solid #4299e1;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.uploadingState p {
+  margin: 0;
+  color: #4a5568;
+  font-weight: 500;
+}
+
+.hiddenInput {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.actions {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.uploadButton {
+  flex: 1;
+  padding: 0.75rem 1rem;
+  background: #4299e1;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: all 0.2s ease;
+  min-width: 120px;
+}
+
+.uploadButton:hover {
+  background: #3182ce;
+  transform: translateY(-1px);
+}
+
+.uploadButton:focus {
+  outline: 2px solid #4299e1;
+  outline-offset: 2px;
+}
+
+.uploadButton:disabled {
+  background: #a0aec0;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.removeTextButton {
+  padding: 0.75rem 1rem;
+  background: transparent;
+  color: #e53e3e;
+  border: 1px solid #e53e3e;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: all 0.2s ease;
+  min-width: 120px;
+}
+
+.removeTextButton:hover {
+  background: #e53e3e;
+  color: white;
+  transform: translateY(-1px);
+}
+
+.removeTextButton:focus {
+  outline: 2px solid #e53e3e;
+  outline-offset: 2px;
+}
+
+/* Responsive design */
+@media (max-width: 640px) {
+  .container {
+    max-width: 100%;
+  }
+  
+  .actions {
+    flex-direction: column;
+  }
+  
+  .uploadButton,
+  .removeTextButton {
+    width: 100%;
+  }
+  
+  .dropZone {
+    min-height: 100px;
+    padding: 1rem;
+  }
+  
+  .uploadIcon {
+    font-size: 1.5rem;
+  }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  .dropZone {
+    border-width: 3px;
+  }
+  
+  .removeButton {
+    background: #000000;
+    color: #ffffff;
+    border: 2px solid #ffffff;
+  }
+  
+  .uploadButton {
+    background: #000000;
+    color: #ffffff;
+    border: 2px solid #ffffff;
+  }
+  
+  .removeTextButton {
+    border-width: 2px;
+    background: #ffffff;
+    color: #000000;
+  }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  .dropZone,
+  .uploadButton,
+  .removeTextButton,
+  .removeButton {
+    transition: none;
+  }
+  
+  .spinner {
+    animation: none;
+    border-top-color: transparent;
+  }
+  
+  .dropZone:hover,
+  .uploadButton:hover,
+  .removeTextButton:hover {
+    transform: none;
+  }
+}

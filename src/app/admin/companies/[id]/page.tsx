@@ -47,7 +47,6 @@ export default function CompanyDetailPage() {
             const result = await response.json();
             
             if (result.success) {
-                console.log("RRR result:", result.data.Id, result.data['Company Name']);
                 setCompany({
                     id: result.data.Id || 0,
                     name: result.data['Company Name'] ||'',

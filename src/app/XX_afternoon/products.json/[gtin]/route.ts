@@ -17,16 +17,16 @@ export async function GET(request: NextRequest, context: { params: Promise<{ gti
     const sql = `
       SELECT 
         p.gtin,
-        p.Name,
+        p.Name as name,
         p.\`Name in French\` as name_french,
-        p.Description,
+        p.Description as description,
         p.\`Description in French\` as description_french,
         p.\`Brand Name\` as brand_name,
         p.\`Country of Origin\` as country_of_origin,
         p.\`Gross Weight (with packaging)\` as gross_weight_kg,
         p.\`Net Content Weight\` as net_weight_kg,
         p.\`Weight Unit\` as weight_unit,
-        p.Image,
+        p.Image as image,
         c.\`Company Name\` as company_name,
         c.\`Company Address\` as company_address,
         c.\`Company Telephone Number\` as company_telephone,
@@ -71,6 +71,7 @@ export async function GET(request: NextRequest, context: { params: Promise<{ gti
         fr: product.description_french || ''
       },
       gtin: product.gtin,
+      image: product.image || '',
       brand: product.brand_name || '',
       countryOfOrigin: product.country_of_origin || '',
       weight: {
